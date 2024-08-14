@@ -4,10 +4,28 @@ $nis = $_POST['nis'];
 $sn = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM tb_santri WHERE nis = '$nis' "));
 $kos = array("-", "Ny. Jamilah", "Gus Zaini", "Ny. Farihah", "Ny. Zahro", "Ny. Sa'adah", "Ny. Mamjudah", "Ny. Naily Z", "Ny. Lathifah");
 
+if (isset($_POST["save"])) {
+    if (add_pulang($_POST) > 0) {
+        echo "
+        <script>
+        alert('Data Berhasil Ditambahkan');
+            window.location.href = 'index.php?link=pages/pulang/data';
+        </script>  
+";
+    } else {
+        echo "
+        <script>
+        alert('Data Gagal Ditambahkan');
+            window.location.href = 'index.php?link=pages/pulang/data';
+        </script>   
+";
+    }
+}
+
 ?>
 <form action="" method="post">
-    <!--<input type="hidden" name="nis" value="<?= $nis; ?>">-->
-    <!-- <input type="hidden" name="isi" value="<?= $_SESSION['nama']; ?>"> -->
+    <input type="hidden" name="nis" value="<?= $nis; ?>">
+    <input type="hidden" name="isi" value="<?= $_SESSION['nama']; ?>">
     <div class="form-group row">
         <div class="col-md-12">
             <div class="pull-left">
@@ -33,7 +51,7 @@ $kos = array("-", "Ny. Jamilah", "Gus Zaini", "Ny. Farihah", "Ny. Zahro", "Ny. S
         </div>
         <label class="col-md-2 ">Tgl Pulang</label>
         <div class="col-md-10">
-            <input type="text" name="tgl_pulang" class="form-control is-valid" id="datepicker-autoclose" required autocomplete="off" value="<?= date('Y-m-d') ?>">
+            <input type="text" name="tgl_pulang" class="form-control is-valid" id="datepicker-autoclose" required autocomplete="off">
         </div>
         <label class="col-md-2 ">Tujuan</label>
         <div class="col-md-10">
@@ -64,3 +82,15 @@ $kos = array("-", "Ny. Jamilah", "Gus Zaini", "Ny. Farihah", "Ny. Zahro", "Ny. S
         </div>
     </div>
 </form>
+
+<script src="assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script>
+    jQuery('#datepicker-autoclose').datepicker({
+        autoclose: true,
+        todayHighlight: true
+    });
+    jQuery('#datepicker-autoclose2').datepicker({
+        autoclose: true,
+        todayHighlight: true
+    });
+</script>

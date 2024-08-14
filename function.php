@@ -36,7 +36,7 @@ function add_pulang($data)
         $wajib = $wajib_kembali;
     }
 
-    mysqli_query($conn, "INSERT INTO pulang VALUES('', '$nis', '$tujuan', '$keperluan', '$tgl_pulang', '$wajib', '-', '-', 0, '$isi') ");
+    mysqli_query($conn, "INSERT INTO pulang(nis, tujuan, keperluan, tgl_pulang, wajib_kembali, tgl_kembali, syarat, ket, penulis) VALUES('$nis', '$tujuan', '$keperluan', '$tgl_pulang', '$wajib', '-', '-', 0, '$isi') ");
     mysqli_affected_rows($conn);
 }
 

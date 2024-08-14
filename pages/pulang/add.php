@@ -1,16 +1,19 @@
 <?php
 require 'function.php';
 $santri =  query("SELECT * FROM pulang ORDER by nis ASC");
+
 if (isset($_POST["save"])) {
     if (add_pulang($_POST) > 0) {
         echo "
         <script>
+        alert('Data Berhasil Ditambahkan');
             window.location.href = 'index.php?link=pages/pulang/data';
         </script>  
 ";
     } else {
         echo "
         <script>
+        alert('Data Gagal Ditambahkan');
             window.location.href = 'index.php?link=pages/pulang/data';
         </script>   
 ";
@@ -116,9 +119,9 @@ if (isset($_POST["save"])) {
 <script>
     let qrcode = '';
     document.addEventListener('keypress', function(event) {
-        $('#tampil-hasil').empty();
         // Ketika karakter "Enter" diterima, proses input sebagai satu kesatuan QR code
         if (event.key === 'Enter') {
+            $('#tampil-hasil').empty();
             // Kirim QR code ke server menggunakan AJAX
             $.ajax({
                 url: 'tampildetail.php',
