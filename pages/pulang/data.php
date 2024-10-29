@@ -1,11 +1,11 @@
 <?php
 require 'function.php';
 if ($level == 'admin') {
-    $santri =  query("SELECT a.id, a.nis, a.tgl_pulang, a.wajib_kembali, a.tgl_kembali, a.ket, b.nama, b.k_formal, b.t_formal, b.k_madin, b.r_madin FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE a.ket = 0 ORDER by a.wajib_kembali ASC");
+    $santri =  query("SELECT a.id, a.nis, a.tgl_pulang, a.wajib_kembali, a.tgl_kembali, a.ket, b.nama, b.k_formal, b.t_formal, b.k_madin, b.r_madin FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE a.ket = 0 AND b.aktif = 'Y' ORDER by a.wajib_kembali ASC");
 } elseif ($level == 'putra') {
-    $santri =  query("SELECT a.id, a.nis, a.tgl_pulang, a.wajib_kembali, a.tgl_kembali, a.ket, b.nama, b.k_formal, b.t_formal, b.k_madin, b.r_madin FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE jkl = 'Laki-laki' AND a.ket = 0 ORDER by a.wajib_kembali ASC");
+    $santri =  query("SELECT a.id, a.nis, a.tgl_pulang, a.wajib_kembali, a.tgl_kembali, a.ket, b.nama, b.k_formal, b.t_formal, b.k_madin, b.r_madin FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE jkl = 'Laki-laki' AND a.ket = 0 AND b.aktif = 'Y' ORDER by a.wajib_kembali ASC");
 } else {
-    $santri =  query("SELECT a.id, a.nis, a.tgl_pulang, a.wajib_kembali, a.tgl_kembali, a.ket, b.nama, b.k_formal, b.t_formal, b.k_madin, b.r_madin FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE jkl = 'Perempuan' AND a.ket = 0 ORDER by a.wajib_kembali ASC");
+    $santri =  query("SELECT a.id, a.nis, a.tgl_pulang, a.wajib_kembali, a.tgl_kembali, a.ket, b.nama, b.k_formal, b.t_formal, b.k_madin, b.r_madin FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE jkl = 'Perempuan' AND a.ket = 0 AND b.aktif = 'Y' ORDER by a.wajib_kembali ASC");
 }
 ?>
 
@@ -54,15 +54,15 @@ if ($level == 'admin') {
                             <tbody>
                                 <?php $i = 1; ?>
                                 <?php foreach ($santri as $r) : ?>
-                                <tr>
-                                    <td><?= $i; ?></td>
-                                    <td><?= $r["nama"]; ?> </td>
-                                    <td><label class="badge badge-primary"><?= $r["k_formal"]; ?>
-                                            <?= $r["t_formal"]; ?></label> / <label
-                                            class="badge badge-warning"><?= $r["k_madin"]; ?>
-                                            <?= $r["r_madin"]; ?></label> </td>
-                                    <td><?= date("d-m-Y", strtotime($r["tgl_pulang"])); ?> </td>
-                                    <td><?php
+                                    <tr>
+                                        <td><?= $i; ?></td>
+                                        <td><?= $r["nama"]; ?> </td>
+                                        <td><label class="badge badge-primary"><?= $r["k_formal"]; ?>
+                                                <?= $r["t_formal"]; ?></label> / <label
+                                                class="badge badge-warning"><?= $r["k_madin"]; ?>
+                                                <?= $r["r_madin"]; ?></label> </td>
+                                        <td><?= date("d-m-Y", strtotime($r["tgl_pulang"])); ?> </td>
+                                        <td><?php
                                             $ket = $r["ket"];
                                             $now = explode("/", date("d/m/Y"));
                                             //$now1 = $now[0] + $now[1] + $now[2];
@@ -93,19 +93,19 @@ if ($level == 'admin') {
                                             }
 
                                             ?> </td>
-                                    <td><a
-                                            href="<?= 'index.php?link=pages/pulang/detail&nis=' . $r['nis'] . '&id=' . $r['id']; ?>"><button
-                                                class="btn btn-success btn-sm"><span class="fa fa-search"></span>
-                                                Detail</button></a>
-                                        <?php if ($level == 'admin') { ?>
-                                        <a href="<?= 'index.php?link=pages/pulang/del&id=' . $r['id']; ?>"
-                                            onclick="return confirm('Yakin Akan dihapus ?')"><button
-                                                class="btn btn-danger btn-sm"><span class="fa fa-trash"></span>
-                                                Hapus</button></a>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                                <?php $i++; ?>
+                                        <td><a
+                                                href="<?= 'index.php?link=pages/pulang/detail&nis=' . $r['nis'] . '&id=' . $r['id']; ?>"><button
+                                                    class="btn btn-success btn-sm"><span class="fa fa-search"></span>
+                                                    Detail</button></a>
+                                            <?php if ($level == 'admin') { ?>
+                                                <a href="<?= 'index.php?link=pages/pulang/del&id=' . $r['id']; ?>"
+                                                    onclick="return confirm('Yakin Akan dihapus ?')"><button
+                                                        class="btn btn-danger btn-sm"><span class="fa fa-trash"></span>
+                                                        Hapus</button></a>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                    <?php $i++; ?>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>

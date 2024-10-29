@@ -29,6 +29,11 @@ function add_pulang($data)
     $keperluan = htmlspecialchars(mysqli_real_escape_string($conn, $data['keperluan']));
     $tgl_pulang = htmlspecialchars(mysqli_real_escape_string($conn, $data['tgl_pulang']));
     $wajib_kembali = htmlspecialchars(mysqli_real_escape_string($conn, $data['wajib_kembali']));
+    $penjemput = htmlspecialchars(mysqli_real_escape_string($conn, $data['penjemput']));
+    $status_penjemput = htmlspecialchars(mysqli_real_escape_string($conn, $data['status']));
+    $bukti_penjemput = htmlspecialchars(mysqli_real_escape_string($conn, $data['bukti']));
+    $pj = htmlspecialchars(mysqli_real_escape_string($conn, $data['pj']));
+    $administrasi = htmlspecialchars(mysqli_real_escape_string($conn, $data['administrasi']));
 
     if ($wajib_kembali == '') {
         $wajib = "Tak dibatasi";
@@ -37,6 +42,8 @@ function add_pulang($data)
     }
 
     mysqli_query($conn, "INSERT INTO pulang(nis, tujuan, keperluan, tgl_pulang, wajib_kembali, tgl_kembali, syarat, ket, penulis) VALUES('$nis', '$tujuan', '$keperluan', '$tgl_pulang', '$wajib', '-', '-', 0, '$isi') ");
+    mysqli_query($conn, "INSERT INTO detail_pulang(nis, tgl_pulang, penjemput, status, bukti, pj, administrasi) VALUES('$nis', '$tgl_pulang', '$penjemput', '$status_penjemput', '$bukti_penjemput', '$pj', '$administrasi') ");
+
     mysqli_affected_rows($conn);
 }
 

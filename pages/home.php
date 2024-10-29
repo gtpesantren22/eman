@@ -8,6 +8,9 @@ $p_pa = mysqli_num_rows(mysqli_query($conn, "SELECT a.ket, b.jkl FROM pulang AS 
 $p_pi = mysqli_num_rows(mysqli_query($conn, "SELECT a.ket, b.jkl FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE a.ket = 0 AND b.jkl =  'Perempuan' "));
 $lang = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pelanggaran"));
 
+$bulanArr = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+$thnArr = mysqli_query($conn, "SELECT YEAR(STR_TO_DATE(tgl_pulang, '%m/%d/%Y')) AS tahunJai FROM pulang GROUP BY tahunJai ORDER BY tahunJai DESC");
+
 ?>
 <!-- ============================================================== -->
 <div class="page-breadcrumb">
@@ -72,42 +75,114 @@ $lang = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pelanggaran"));
             </div>
         </div>
         <!-- Column -->
-        <?php if($nama == 'Administrator' ) { ?>
+        <!-- $lembaga = -->
         <div class="col-md-12">
             <div class="alert alert-light" role="alert">
-                <div class="table-responsive">
-                        <table id="zero_config" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>User Email</th>
-                                    <th>User IP </th>
-                                    <th>Login Time</th>
-                                    <th>Logout Time </th>
-                                    <th>Status </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $i = 1; ?>
-                                <?php 
-                                $ww = mysqli_query($conn, "select * from userlog");
-                                while ($row = mysqli_fetch_assoc($ww)){ ?>
-                                <tr>
-                                    <td><?= $i; ?></td>
-                                    <td><?= htmlentities($row['username']); ?></td>
-                                    <td><?= htmlentities($row['userip']); ?></td>
-                                    <td> <?= htmlentities($row['loginTime']); ?></td>
-                                    <td><?= htmlentities($row['logout']); ?></td>
-                                    <td><?=  $row['status'];?></td>
-                                </tr>
-                                <?php $i++; ?>
-                                <?php } ?>
-                            </tbody>
-                        </table>
+                <form action="" method="post" id="ganti-tahun">
+
+                    <div class="form-group row">
+                        <div class="col-md-5">
+                            <select name="" id="bulan" class="form-control">
+                                <option value="">-pilih bulan-</option>
+                                <?php for ($i = 0; $i <= 11; $i++): ?>
+                                    <option value="<?= $i; ?>"><?= $bulanArr[$i]; ?></option>
+                                <?php endfor ?>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <select name="" id="tahun" class="form-control">
+                                <option value="">-pilih tahun-</option>
+                                <?php while ($th = mysqli_fetch_object($thnArr)): ?>
+                                    <option value="<?= $th->tahunJai; ?>"><?= $th->tahunJai; ?></option>
+                                <?php endwhile ?>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary" name="cek" type="submit"><span class="fa fa-search"></span> Cek</button>
+                        </div>
                     </div>
+                </form>
+                <div id="show-rekap"></div>
             </div>
         </div>
-        <?php }?>
     </div>
     <!-- ============================================================== -->
 </div>
+
+<!-- <div class="col-md-12">
+    <div class="alert alert-light" role="alert">
+        <div class="table-responsive">
+            <table id="zero_config" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>User Email</th>
+                        <th>User IP </th>
+                        <th>Login Time</th>
+                        <th>Logout Time </th>
+                        <th>Status </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $i = 1; ?>
+                    <?php
+                    $ww = mysqli_query($conn, "select * from userlog");
+                    while ($row = mysqli_fetch_assoc($ww)) { ?>
+                        <tr>
+                            <td><?= $i; ?></td>
+                            <td><?= htmlentities($row['username']); ?></td>
+                            <td><?= htmlentities($row['userip']); ?></td>
+                            <td> <?= htmlentities($row['loginTime']); ?></td>
+                            <td><?= htmlentities($row['logout']); ?></td>
+                            <td><?= $row['status']; ?></td>
+                        </tr>
+                        <?php $i++; ?>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> -->
+<script src="assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            type: "POST",
+            url: "pages/showRekap.php",
+            dataType: 'html',
+            data: {
+                "bulan": "",
+                "tahun": "",
+            },
+            success: function(data) {
+                $('#show-rekap').html(data);
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText);
+            }
+        })
+
+        $('#ganti-tahun').on('submit', function(e) {
+            e.preventDefault()
+
+            var bulan = $('#bulan').val();
+            var tahun = $('#tahun').val();
+            $.ajax({
+                type: "POST",
+                url: "pages/showRekap.php",
+                dataType: 'html',
+                data: {
+                    "bulan": bulan,
+                    "tahun": tahun,
+                },
+                success: function(data) {
+                    $('#show-rekap').html(data);
+                },
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText);
+                }
+            })
+        })
+    })
+</script>

@@ -50,19 +50,19 @@ if (isset($_POST["save"])) {
                                     <option>Select</option>
                                     <?php
                                     if ($level == 'admin') {
-                                        $th = mysqli_query($conn, "SELECT * FROM tb_santri");
+                                        $th = mysqli_query($conn, "SELECT * FROM tb_santri WHERE aktif = 'Y'");
                                     } elseif ($level == 'putra') {
-                                        $th = mysqli_query($conn, "SELECT * FROM tb_santri WHERE jkl = 'Laki-laki' ");
+                                        $th = mysqli_query($conn, "SELECT * FROM tb_santri WHERE aktif = 'Y' AND jkl = 'Laki-laki' ");
                                     } else {
-                                        $th = mysqli_query($conn, "SELECT * FROM tb_santri WHERE jkl = 'Perempuan' ");
+                                        $th = mysqli_query($conn, "SELECT * FROM tb_santri WHERE aktif = 'Y' AND jkl = 'Perempuan' ");
                                     }
                                     $no = 0;
                                     while ($thn = mysqli_fetch_array($th)) {
                                         $no++;
                                     ?>
-                                    <option value="<?= $thn['nis'] ?>"><?= $thn['nama'] ?>
-                                        (<?= $thn['k_formal'] . " " . $thn['t_formal'] ?>)
-                                    </option>
+                                        <option value="<?= $thn['nis'] ?>"><?= $thn['nama'] ?>
+                                            (<?= $thn['k_formal'] . " " . $thn['t_formal'] ?>)
+                                        </option>
                                     <?php
                                     }
                                     ?>
@@ -82,72 +82,73 @@ if (isset($_POST["save"])) {
                         $nis = $_POST['nama'];
                         $sn = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM tb_santri WHERE nis = '$nis' "));
                     ?>
-                    <form action="" method="post">
-                        <input type="hidden" name="nis" value="<?= $nis; ?>">
-                        <div class="form-group row">
-                            <div class="col-md-12">
-                                <div class="pull-left">
-                                    <address>
-                                        <h3> &nbsp;<b class="text-danger"><?= $sn['nama']; ?></b></h3>
-                                        <p class="text-muted m-l-5 font-bold">
-                                            <?= $sn['tempat'] . ", " . $sn['tanggal']; ?>
-                                            <br /> <?= $sn['desa'] . " - " . $sn['kec'] . " - " . $sn['kab'] ?>
-                                            <br />
-                                            <?= $sn['k_formal'] . " " . $sn['t_formal'] . " / " . $sn['k_madin'] . " " . $sn['r_madin'] ?>
-                                            <br /> <?= $sn['komplek'] . " - " . $sn['kamar'] ?></p>
-                                    </address>
+                        <form action="" method="post">
+                            <input type="hidden" name="nis" value="<?= $nis; ?>">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <div class="pull-left">
+                                        <address>
+                                            <h3> &nbsp;<b class="text-danger"><?= $sn['nama']; ?></b></h3>
+                                            <p class="text-muted m-l-5 font-bold">
+                                                <?= $sn['tempat'] . ", " . $sn['tanggal']; ?>
+                                                <br /> <?= $sn['desa'] . " - " . $sn['kec'] . " - " . $sn['kab'] ?>
+                                                <br />
+                                                <?= $sn['k_formal'] . " " . $sn['t_formal'] . " / " . $sn['k_madin'] . " " . $sn['r_madin'] ?>
+                                                <br /> <?= $sn['komplek'] . " - " . $sn['kamar'] ?>
+                                            </p>
+                                        </address>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 ">Kasus</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control is-invalid" name="kasus" id="validationServer01"
-                                    required></textarea>
-                            </div>
-                            <label class="col-md-2 ">Kronologis</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control is-invalid" name="kronologis" id="validationServer01"
-                                    required></textarea>
-                            </div>
-                            <label class="col-md-2 ">Tanggal</label>
-                            <div class="col-md-10">
-                                <input type="text" name="tgl" class="form-control is-invalid" id="datepicker-autoclose"
-                                    required autocomplete="off">
-                            </div>
-                            <label class="col-md-2 ">Tempat</label>
-                            <div class="col-md-10">
-                                <input type="text" name="tempat" class="form-control is-invalid" required
-                                    autocomplete="off">
-                            </div>
-                            <label class="col-md-2 ">Keterangan</label>
-                            <div class="col-md-10">
-                                <textarea class="form-control is-invalid" name="ket" id="validationServer01"></textarea>
-                            </div>
-                            <label class="col-md-2 ">Sanksi</label>
-                            <div class="col-md-10">
-                                <input type="text" name="sanksi" class="form-control is-invalid" autocomplete="off">
-                                <div class="invalid-feedback">
-                                    * harap kosongi jika belum ditangani
+                            <div class="form-group row">
+                                <label class="col-md-2 ">Kasus</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control is-invalid" name="kasus" id="validationServer01"
+                                        required></textarea>
+                                </div>
+                                <label class="col-md-2 ">Kronologis</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control is-invalid" name="kronologis" id="validationServer01"
+                                        required></textarea>
+                                </div>
+                                <label class="col-md-2 ">Tanggal</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="tgl" class="form-control is-invalid" id="datepicker-autoclose"
+                                        required autocomplete="off">
+                                </div>
+                                <label class="col-md-2 ">Tempat</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="tempat" class="form-control is-invalid" required
+                                        autocomplete="off">
+                                </div>
+                                <label class="col-md-2 ">Keterangan</label>
+                                <div class="col-md-10">
+                                    <textarea class="form-control is-invalid" name="ket" id="validationServer01"></textarea>
+                                </div>
+                                <label class="col-md-2 ">Sanksi</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="sanksi" class="form-control is-invalid" autocomplete="off">
+                                    <div class="invalid-feedback">
+                                        * harap kosongi jika belum ditangani
+                                    </div>
+                                </div>
+                                <label class="col-md-2 ">Yang Menanganani</label>
+                                <div class="col-md-10">
+                                    <input type="text" name="pj" class="form-control is-invalid" autocomplete="off">
+                                    <div class="invalid-feedback">
+                                        * harap kosongi jika belum ditangani
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <label class="col-md-2 "></label>
+                                <div class="col-md-10">
+                                    <button class="btn btn-danger " name="save" type="submit"><span
+                                            class="fa fa-check"></span>
+                                        Simpan</button>
                                 </div>
                             </div>
-                            <label class="col-md-2 ">Yang Menanganani</label>
-                            <div class="col-md-10">
-                                <input type="text" name="pj" class="form-control is-invalid" autocomplete="off">
-                                <div class="invalid-feedback">
-                                    * harap kosongi jika belum ditangani
-                                </div>
-                            </div>
-                            <br>
-                            <br>
-                            <label class="col-md-2 "></label>
-                            <div class="col-md-10">
-                                <button class="btn btn-danger " name="save" type="submit"><span
-                                        class="fa fa-check"></span>
-                                    Simpan</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
                     <?php } ?>
                 </div>
             </div>

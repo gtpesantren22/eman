@@ -1,24 +1,6 @@
 <?php
 require 'function.php';
 $santri =  query("SELECT * FROM pulang ORDER by nis ASC");
-
-if (isset($_POST["save"])) {
-    if (add_pulang($_POST) > 0) {
-        echo "
-        <script>
-        alert('Data Berhasil Ditambahkan');
-            window.location.href = 'index.php?link=pages/pulang/data';
-        </script>  
-";
-    } else {
-        echo "
-        <script>
-        alert('Data Gagal Ditambahkan');
-            window.location.href = 'index.php?link=pages/pulang/data';
-        </script>   
-";
-    }
-}
 ?>
 
 <!-- ============================================================== -->
@@ -143,3 +125,45 @@ if (isset($_POST["save"])) {
         }
     });
 </script>
+
+<?php
+if (isset($_POST["save"])) {
+    $nisOk = $_POST['nisOk'];
+    $isi = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['isi']));
+    $tujuan = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['tujuan']));
+    $keperluan = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['keperluan']));
+    $tgl_pulang = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['tgl_pulang']));
+    $wajib_kembali = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['wajib_kembali']));
+    $penjemput = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['penjemput']));
+    $status_penjemput = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['status']));
+    $bukti_penjemput = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['bukti']));
+    $pj = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['pj']));
+    $administrasi = htmlspecialchars(mysqli_real_escape_string($conn, $_POST['administrasi']));
+
+    if ($wajib_kembali == '') {
+        $wajib = "Tak dibatasi";
+    } else {
+        $wajib = $wajib_kembali;
+    }
+
+    $sqlSave = mysqli_query($conn, "INSERT INTO pulang(nis, tujuan, keperluan, tgl_pulang, wajib_kembali, tgl_kembali, syarat, ket, penulis) VALUES('$nisOk', '$tujuan', '$keperluan', '$tgl_pulang', '$wajib', '-', '-', 0, '$isi') ");
+
+    $sqlSave2 = mysqli_query($conn, "INSERT INTO detail_pulang(nis, tgl_pulang, penjemput, status, bukti, pj, administrasi) VALUES('$nisOk', '$tgl_pulang', '$penjemput', '$status_penjemput', '$bukti_penjemput', '$pj', '$administrasi') ");
+
+    if ($sqlSave && $sqlSave2) {
+        echo "
+        <script>
+        alert('Data Berhasil Ditambahkan');
+            window.location.href = 'index.php?link=pages/pulang/data';
+        </script>  
+        ";
+    } else {
+        echo "
+        <script>
+        alert('Data Gagal Ditambahkan');
+            window.location.href = 'index.php?link=pages/pulang/data';
+        </script>   
+        ";
+    }
+}
+?>

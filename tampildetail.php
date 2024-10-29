@@ -1,44 +1,50 @@
 <?php
-include 'function.php';
+session_start();
+require 'function.php';
 $nis = $_POST['nis'];
 $sn = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM tb_santri WHERE nis = '$nis' "));
-$kos = array("-", "Ny. Jamilah", "Gus Zaini", "Ny. Farihah", "Ny. Zahro", "Ny. Sa'adah", "Ny. Mamjudah", "Ny. Naily Z", "Ny. Lathifah");
+$kos = array("-", "Ny. Jamilah", "Gus Zaini", "Ny. Farihah", "Ny. Zahro", "Ny. Sa'adah", "Ny. Mamjudah", "Ny. Naily Z", "Ny. Lathifah", "Ny. Umi Kultsum");
 
-if (isset($_POST["save"])) {
-    if (add_pulang($_POST) > 0) {
-        echo "
-        <script>
-        alert('Data Berhasil Ditambahkan');
-            window.location.href = 'index.php?link=pages/pulang/data';
-        </script>  
-";
-    } else {
-        echo "
-        <script>
-        alert('Data Gagal Ditambahkan');
-            window.location.href = 'index.php?link=pages/pulang/data';
-        </script>   
-";
-    }
-}
 
 ?>
 <form action="" method="post">
-    <input type="hidden" name="nis" value="<?= $nis; ?>">
+    <input type="hidden" name="nisOk" value="<?= $nis; ?>">
     <input type="hidden" name="isi" value="<?= $_SESSION['nama']; ?>">
     <div class="form-group row">
-        <div class="col-md-12">
+        <div class="col-md-5">
             <div class="pull-left">
                 <address>
                     <h3> &nbsp;<b class="text-danger"><?= $sn['nama']; ?></b></h3>
-                    <p class="text-muted m-l-5 font-bold">
-                        <?= $sn['tempat'] . ", " . $sn['tanggal']; ?>
-                        <br /> <?= $sn['desa'] . " - " . $sn['kec'] . " - " . $sn['kab'] ?>
-                        <br />
-                        <?= $sn['k_formal'] . " " . $sn['t_formal'] . " / " . $sn['k_madin'] . " " . $sn['r_madin'] ?>
-                        <br /> <?= $sn['komplek'] . " - " . $sn['kamar'] ?>
-                        <br /> Dekos ke - <?= $kos[$sn['t_kos']]; ?>
-                    </p>
+                    <table class="table table-sm table-borderless">
+                        <tr>
+                            <td>Tetala</td>
+                            <td>: <?= $sn['tempat'] . ", " . $sn['tanggal']; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Alamat</td>
+                            <td>: <?= $sn['desa'] . " - " . $sn['kec'] . " - " . $sn['kab'] ?></td>
+                        </tr>
+                        <tr>
+                            <td>Kelas</td>
+                            <td>: <?= $sn['k_formal'] . " " . $sn['t_formal'] . " / " . $sn['k_madin'] . " " . $sn['r_madin'] ?></td>
+                        </tr>
+                        <tr>
+                            <td>Komplek</td>
+                            <td>: <?= $sn['komplek'] . " - " . $sn['kamar'] ?></td>
+                        </tr>
+                        <tr>
+                            <td>Dekosan</td>
+                            <td>: Dekos ke - <?= $kos[$sn['t_kos']]; ?></td>
+                        </tr>
+                        <tr>
+                            <td>Bapak</td>
+                            <td>: <?= $sn['bapak'] ?></td>
+                        </tr>
+                        <tr>
+                            <td>Ibu</td>
+                            <td>: <?= $sn['ibu'] ?></td>
+                        </tr>
+                    </table>
                 </address>
             </div>
         </div>
@@ -51,7 +57,7 @@ if (isset($_POST["save"])) {
         </div>
         <label class="col-md-2 ">Tgl Pulang</label>
         <div class="col-md-10">
-            <input type="text" name="tgl_pulang" class="form-control is-valid" id="datepicker-autoclose" required autocomplete="off">
+            <input type="text" name="tgl_pulang" class="form-control is-valid" id="datepicker-autoclose" required value="<?= date('m/d/Y') ?>">
         </div>
         <label class="col-md-2 ">Tujuan</label>
         <div class="col-md-10">
@@ -71,6 +77,32 @@ if (isset($_POST["save"])) {
                 * harap DIKOSONGI jika pulangnya tidak terbatas
             </div>
         </div>
+        <label class="col-md-2 ">Nama Penjemput</label>
+        <div class="col-md-10">
+            <input type="text" name="penjemput" class="form-control is-valid" id="validationServer01"
+                required>
+        </div>
+        <label class="col-md-2 ">Status Penjemput</label>
+        <div class="col-md-10">
+            <input type="text" name="status" class="form-control is-valid" id="validationServer01"
+                required>
+        </div>
+        <label class="col-md-2 ">Bukti</label>
+        <div class="col-md-10">
+            <input type="text" name="bukti" class="form-control is-valid" id="validationServer01"
+                required>
+        </div>
+        <label class="col-md-2 ">PJ</label>
+        <div class="col-md-10">
+            <input type="text" name="pj" class="form-control is-valid" id="validationServer01"
+                required>
+        </div>
+        <label class="col-md-2 ">Uang Administrasi</label>
+        <div class="col-md-10">
+            <input type="text" name="administrasi" class="form-control is-valid" id="validationServer01"
+                required>
+        </div>
+
         <br>
         <br>
         <br>

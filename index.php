@@ -238,6 +238,7 @@ $user = $_SESSION['user'];
     <!-- All Jquery -->
     <!-- ============================================================== -->
     <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+
     <!-- Bootstrap tether Core JavaScript -->
     <script src="assets/libs/popper.js/dist/umd/popper.min.js"></script>
     <script src="assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -268,9 +269,6 @@ $user = $_SESSION['user'];
         jQuery('#datepicker-autoclose2').datepicker({
             autoclose: true,
             todayHighlight: true
-        });
-        var quill = new Quill('#editor', {
-            theme: 'snow'
         });
     </script>
 
