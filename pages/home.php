@@ -8,7 +8,7 @@ $p_pa = mysqli_num_rows(mysqli_query($conn, "SELECT a.ket, b.jkl FROM pulang AS 
 $p_pi = mysqli_num_rows(mysqli_query($conn, "SELECT a.ket, b.jkl FROM pulang AS a INNER JOIN tb_santri AS b ON a.nis=b.nis WHERE a.ket = 0 AND b.jkl =  'Perempuan' "));
 $lang = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pelanggaran"));
 
-$bulanArr = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+$bulanArr = array('', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
 $thnArr = mysqli_query($conn, "SELECT YEAR(STR_TO_DATE(tgl_pulang, '%m/%d/%Y')) AS tahunJai FROM pulang GROUP BY tahunJai ORDER BY tahunJai DESC");
 
 ?>
@@ -84,7 +84,7 @@ $thnArr = mysqli_query($conn, "SELECT YEAR(STR_TO_DATE(tgl_pulang, '%m/%d/%Y')) 
                         <div class="col-md-5">
                             <select name="" id="bulan" class="form-control">
                                 <option value="">-pilih bulan-</option>
-                                <?php for ($i = 0; $i <= 11; $i++): ?>
+                                <?php for ($i = 1; $i <= 12; $i++): ?>
                                     <option value="<?= $i; ?>"><?= $bulanArr[$i]; ?></option>
                                 <?php endfor ?>
                             </select>

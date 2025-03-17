@@ -8,7 +8,7 @@ $tahun = $_POST['tahun'];
 
 $bulanIni = date('m');
 $tahunIni = date('Y');
-$bulanArr = array('Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+$bulanArr = array('', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
 
 if ($bulan && $bulan != '') {
     $komplekLk = mysqli_query($conn, "SELECT tb_santri.komplek, COUNT(komplek) AS jml FROM tb_santri JOIN pulang ON tb_santri.nis=pulang.nis WHERE MONTH(STR_TO_DATE(tgl_pulang, '%m/%d/%Y')) = '$bulan' AND YEAR(STR_TO_DATE(tgl_pulang, '%m/%d/%Y')) = '$tahun' AND tb_santri.jkl = 'Laki-laki' GROUP BY komplek ORDER BY komplek ASC");
