@@ -2,40 +2,52 @@
 session_start();
 require 'function.php';
 
+// Jika sudah login, arahkan ke halaman utama
 if (isset($_SESSION["login"])) {
     header("Location: index.php");
+    exit;
 }
 
 if (isset($_POST["log"])) {
+    $username = mysqli_real_escape_string($conn, trim($_POST["username"]));
+    $password = mysqli_real_escape_string($conn, trim($_POST["password"]));
 
-    $username = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["username"]));
-    $password = htmlspecialchars(mysqli_real_escape_string($conn, $_POST["password"]));
+    $sql = mysqli_query($conn, "SELECT * FROM user WHERE username = '$username'");
 
-    $sql = mysqli_query($conn, "SELECT * FROM user WHERE username='$username' ");
-    if (mysqli_num_rows($sql) == 0) {
-        //jika salah
-        echo '<script language="javascript">alert("Username / Password tidak ditemukan!"); document.location="login.php";</script>';
+    if (mysqli_num_rows($sql) === 0) {
+        echo '<script>alert("Username / Password tidak ditemukan!"); window.location="login.php";</script>';
+        exit;
+    }
+
+    $row = mysqli_fetch_assoc($sql);
+
+    // Gunakan password hash jika memungkinkan
+    if ($row['password'] === $password) {
+        $_SESSION['login'] = true;
+        $_SESSION['nama'] = $row['nama'];
+        $_SESSION['stts'] = $row['stts'];
+        $_SESSION['level'] = $row['level'];
+        $_SESSION['user'] = $row['username'];
+
+        // Simpan log login
+        $uid = $row['id'];
+        $uip = $_SERVER['REMOTE_ADDR'];
+        $status = 1;
+        $logout = 0; // tambahkan nilai default jika kolom logout wajib diisi
+
+        $query_log = "INSERT INTO userlog (uid, username, userip, status, logout) 
+                      VALUES ('$uid', '$username', '$uip', '$status', '$logout')";
+        mysqli_query($conn, $query_log);
+
+        echo '<script>window.location="index.php";</script>';
+        exit;
     } else {
-        //jika benar
-        $row = mysqli_fetch_assoc($sql);
-        if ($row['password'] == $password) { //tabel level jika login dengan level 1 buat session admin
-            $_SESSION['login'] = true;
-            $_SESSION['nama'] = $row['nama'];
-            $_SESSION['stts'] = $row['stts'];
-            $_SESSION['level'] = $row['level'];
-            $_SESSION['user'] = $row['username'];
-
-            $host = $_SERVER['HTTP_HOST'];
-            $uip = $_SERVER['REMOTE_ADDR'];
-            $status = 1;
-            $log = mysqli_query($conn, "insert into userlog(uid,username,userip,status) values('" . $row['id'] . "','" . $username . "','$uip','$status')");
-            $uri = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-            echo '<script language="javascript"> document.location="index.php";</script>';
-        }
+        echo '<script>alert("Password salah!"); window.location="login.php";</script>';
+        exit;
     }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html dir="ltr">
 
